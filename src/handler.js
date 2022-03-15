@@ -79,16 +79,158 @@ const addBookHandler = (request, h) => {
     return response;
 }
 
-const getAllBooksHandler = () => ({
-    status: 'success',
-    data: {
-        books: books.map((book) => ({
-            id: book.id,
-            name: book.name,
-            publisher: book.publisher
-        })),
-    },
-});
+const getAllBooksHandler = (request, h) => {
+    const { name, reading, finished } = request.query;
+
+    if(name !== undefined){
+        const filteredBooks = books.filter((book) => book.name.toLowerCase().includes(name.toLowerCase()));
+        if(filteredBooks.length > 0){
+            const response = h.response({
+                status: 'success',
+                message: `Berhasil mengambil ${filteredBooks.length} buku`,
+                data: {
+                    books: filteredBooks.map((book) => ({
+                        id: book.id,
+                        name: book.name,
+                        publisher: book.publisher
+                    })),
+                }
+            });
+            response.code(200);
+            return response;
+        }
+        else{
+            const response = h.response({
+                status: 'fail',
+                message: 'Buku tidak ditemukan',
+            });
+            response.code(404);
+            return response;
+        }
+    }
+
+    if(reading !== undefined){
+        if(reading == 0){
+            const filteredBooks = books.filter((book) => book.reading === false);
+            if(filteredBooks.length > 0){
+                const response = h.response({
+                    status: 'success',
+                    message: `Berhasil mengambil ${filteredBooks.length} buku`,
+                    data: {
+                        books: filteredBooks.map((book) => ({
+                            id: book.id,
+                            name: book.name,
+                            publisher: book.publisher
+                        })),
+                    }
+                })
+                response.code(200);
+                return response;
+            }
+            else{
+                const response = h.response({
+                    status: 'fail',
+                    message: 'Buku tidak ditemukan',
+                });
+                response.code(404);
+                return response;
+            }
+        }
+        else{
+            const filteredBooks = books.filter((book) => book.reading === true);
+            if(filteredBooks.length > 0){
+                const response = h.response({
+                    status: 'success',
+                    message: `Berhasil mengambil ${filteredBooks.length} buku`,
+                    data: {
+                        books: filteredBooks.map((book) => ({
+                            id: book.id,
+                            name: book.name,
+                            publisher: book.publisher
+                        })),
+                    }
+                })
+                response.code(200);
+                return response;
+            }
+            else{
+                const response = h.response({
+                    status: 'fail',
+                    message: 'Buku tidak ditemukan',
+                });
+                response.code(404);
+                return response;
+            }
+        }
+    }
+
+    if(finished !== undefined){
+        if(finished == 0){
+            const filteredBooks = books.filter((book) => book.finished === false);
+            if(filteredBooks.length > 0){
+                const response = h.response({
+                    status: 'success',
+                    message: `Berhasil mengambil ${filteredBooks.length} buku`,
+                    data: {
+                        books: filteredBooks.map((book) => ({
+                            id: book.id,
+                            name: book.name,
+                            publisher: book.publisher,
+                        })),
+                    }
+                })
+                response.code(200);
+                return response;
+            }
+            else{
+                const response = h.response({
+                    status: 'fail',
+                    message: 'Buku tidak ditemukan',
+                });
+                response.code(404);
+                return response;
+            }
+        }
+        else{
+            const filteredBooks = books.filter((book) => book.finished === true);
+            if(filteredBooks.length > 0){
+                const response = h.response({
+                    status: 'success',
+                    message: `Berhasil mengambil ${filteredBooks.length} buku`,
+                    data: {
+                        books: filteredBooks.map((book) => ({
+                            id: book.id,
+                            name: book.name,
+                            publisher: book.publisher
+                        })),
+                    }
+                })
+                response.code(200);
+                return response;
+            }
+            else{
+                const response = h.response({
+                    status: 'fail',
+                    message: 'Buku tidak ditemukan',
+                });
+                response.code(404);
+                return response;
+            }
+        }
+    }
+
+    const response = h.response({
+        status: 'success',
+        data: {
+            books: books.map((book) => ({
+                id: book.id,
+                name: book.name,
+                publisher: book.publisher
+            })),
+        },
+    })
+    return response;
+};
 
 const getBookByIdhandler = (request, h) => {
     const { bookId } = request.params;
