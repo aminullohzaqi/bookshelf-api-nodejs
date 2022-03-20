@@ -1,3 +1,6 @@
+/* eslint-disable comma-dangle */
+/* eslint-disable semi */
+/* eslint-disable indent */
 const Hapi = require('@hapi/hapi');
 const routes = require('./routes');
 
